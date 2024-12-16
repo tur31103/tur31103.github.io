@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../common.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --temple-red: #990000;
+            --temple-white: #FFFFFF;
+        }
+
+        .navbar, .footer {
+            background-color: var(--temple-red);
+        }
+
+        .navbar-brand, .dropdown-toggle {
+            color: var(--temple-white) !important;
+        }
+        .nav-link {
+            color: var(--temple-white) !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: var(--temple-white);
+            color: black;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            height: auto;
+            padding: 20px;
+            border-right: 1px solid var(--temple-red);
+            flex-shrink: 0;
+        }
+
+        .sidebar h5 {
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: black;
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover {
+            background-color: #e9ecef;
+        }
+
+        .content-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+
+        .btn-temple {
+            background-color: var(--temple-red);
+            color: var(--temple-white);
+            border: none;
+        }
+
+        .btn-temple:hover {
+            background-color: #660000;
+        }
+
+        table {
+            margin-top: 20px;
+        }
+
+        .table-row:hover {
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            background-color: var(--temple-red);
+            color: var(--temple-white);
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">LearnZilla</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../FacultyFlow/faculty_dashboard.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../FacultyFlow/faculty_chat.html">New Faculty Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../FacultyFlow/faculty_progess_dashboard.html">Student Progress Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../FacultyFlow/faculty_feedback_dashboard.html">Student Feedback Dashboard</a>
+                    </li>
+                </ul>
+                <!-- User Dropdown with Profile Picture -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown d-flex align-items-center">
+                        <img src="https://via.placeholder.com/30" alt="Profile Picture" class="profile-pic">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            User
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../index.html">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h5>Your Courses</h5>
+            <a href="#" onclick="loadCourseFeedback('CS101')">CS101 - Introduction to Programming</a>
+            <a href="#" onclick="loadCourseFeedback('CS201')">CS201 - Data Structures</a>
+            <a href="#" onclick="loadCourseFeedback('CS301')">CS301 - Software Engineering</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-container">
+            <h1 class="mb-4">Feedback Dashboard</h1>
+            <h4 id="courseTitle">Course: All Courses</h4>
+
+            <!-- Feedback Chart -->
+            <div class="chart-container">
+                <h4>Feedback Summary</h4>
+                <canvas id="feedbackChart"></canvas>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search feedback by date or score" oninput="filterTable()">
+            </div>
+
+            <!-- Feedback Records Table -->
+            <div class="table-responsive">
+                <table class="table table-striped" id="feedbackTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Overall Score</th>
+                            <th scope="col">Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedbackTableBody">
+                        <tr class="table-row" data-bs-toggle="modal" data-bs-target="#feedbackModal" onclick="loadFeedbackDetails(1)">
+                            <td>2024-12-01</td>
+                            <td>8</td>
+                            <td>Positive feedback on course materials.</td>
+                        </tr>
+                        <tr class="table-row" data-bs-toggle="modal" data-bs-target="#feedbackModal" onclick="loadFeedbackDetails(2)">
+                            <td>2024-12-05</td>
+                            <td>6</td>
+                            <td>Mixed feedback on assignment difficulty.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="feedbackModalLabel">Feedback Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="feedbackDetailsContent">Feedback details will appear here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 LearnZilla. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const feedbackData = {
+            CS101: {
+                title: "CS101 - Introduction to Programming",
+                chartData: [10, 2, 5],
+                feedback: [
+                    { date: "2024-12-01", score: 8, summary: "Great clarity in lectures." },
+                    { date: "2024-12-03", score: 7, summary: "Good examples, but more labs needed." }
+                ]
+            },
+            CS201: {
+                title: "CS201 - Data Structures",
+                chartData: [8, 4, 3],
+                feedback: [
+                    { date: "2024-12-02", score: 9, summary: "Students loved hands-on projects." },
+                    { date: "2024-12-05", score: 6, summary: "Some found the topics hard." }
+                ]
+            },
+            CS301: {
+                title: "CS301 - Software Engineering",
+                chartData: [12, 1, 6],
+                feedback: [
+                    { date: "2024-12-01", score: 9, summary: "Appreciated the group work." },
+                    { date: "2024-12-07", score: 8, summary: "Useful real-world examples." }
+                ]
+            }
+        };
+
+        const ctx = document.getElementById('feedbackChart').getContext('2d');
+        const feedbackChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Positive Feedback', 'Negative Feedback', 'Responded'],
+                datasets: [{
+                    label: 'Feedback Count',
+                    data: [15, 5, 10],
+                    backgroundColor: ['#28a745', '#dc3545', '#007bff']
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        function loadCourseFeedback(courseCode) {
+            const course = feedbackData[courseCode];
+            if (!course) return;
+
+            document.getElementById('courseTitle').textContent = `Course: ${course.title}`;
+            feedbackChart.data.datasets[0].data = course.chartData;
+            feedbackChart.update();
+
+            const tableBody = document.getElementById('feedbackTableBody');
+            tableBody.innerHTML = '';
+            course.feedback.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                row.className = 'table-row';
+                row.setAttribute('data-bs-toggle', 'modal');
+                row.setAttribute('data-bs-target', '#feedbackModal');
+                row.setAttribute('onclick', `loadFeedbackDetails(${index + 1})`);
+                row.innerHTML = `
+                    <td>${entry.date}</td>
+                    <td>${entry.score}</td>
+                    <td>${entry.summary}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function loadFeedbackDetails(feedbackId) {
+            const courseTitle = document.getElementById('courseTitle').textContent.split(': ')[1];
+            const course = Object.values(feedbackData).find(c => c.title === courseTitle);
+
+            if (!course || !course.feedback[feedbackId - 1]) {
+                document.getElementById('feedbackDetailsContent').textContent = 'Feedback details not available.';
+                return;
+            }
+
+            const feedback = course.feedback[feedbackId - 1];
+            document.getElementById('feedbackDetailsContent').innerHTML = `
+                <strong>Date:</strong> ${feedback.date}<br>
+                <strong>Score:</strong> ${feedback.score}<br>
+                <strong>Summary:</strong> ${feedback.summary}
+            `;
+        }
+
+        function filterTable() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#feedbackTable tbody tr');
+
+            rows.forEach(row => {
+                const date = row.cells[0].textContent.toLowerCase();
+                const score = row.cells[1].textContent.toLowerCase();
+                row.style.display = date.includes(searchValue) || score.includes(searchValue) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>

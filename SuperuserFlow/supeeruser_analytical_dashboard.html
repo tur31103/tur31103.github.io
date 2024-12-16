@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../common.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superuser Analytical Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --temple-red: #990000;
+            --temple-white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--temple-white);
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: var(--temple-red);
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: var(--temple-white) !important;
+        }
+
+        .content-container {
+            padding: 20px;
+        }
+
+        .btn-temple {
+            background-color: var(--temple-red);
+            color: var(--temple-white);
+            border: none;
+        }
+
+        .btn-temple:hover {
+            background-color: #660000;
+        }
+
+        .profile-pic {
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+
+        footer {
+            background-color: var(--temple-red);
+            color: var(--temple-white);
+        }
+
+        @media (max-width: 767px) {
+            .stat-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .stat-card p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">LearnZilla</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../SuperuserFlow/superuser_dashboard.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../SuperuserFlow/superuser_history.html">All Chat History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../SuperuserFlow/superuser_user_dashboard.html">User Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../SuperuserFlow/supeeruser_analytical_dashboard.html">Analytical Dashboard</a>
+                    </li>
+                </ul>
+                <!-- User Dropdown with Profile Picture -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown d-flex align-items-center">
+                        <img src="https://via.placeholder.com/30" alt="Profile Picture" class="profile-pic">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            User
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../index.html">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Container -->
+    <div class="content-container">
+        <h1 class="mb-4">LearnZilla Analytical Dashboard</h1>
+        <p>Welcome to the superuser dashboard. Here you can review system-wide analytics, performance metrics, and user engagement for the LearnZilla AI Chat Bot.</p>
+
+        <!-- Overview Stats -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h3>35,200</h3>
+                    <p>Total Conversations (30 Days)</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h3>4,100</h3>
+                    <p>Active Unique Users (30 Days)</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h3>1.2s</h3>
+                    <p>Avg. Response Time</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <h3>92%</h3>
+                    <p>User Satisfaction Rate</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row chart-container">
+            <!-- Monthly Chats Line Chart -->
+            <div class="col-md-6">
+                <h4>Monthly Chat Volume</h4>
+                <canvas id="monthlyChatChart"></canvas>
+            </div>
+
+            <!-- User Type Breakdown Doughnut Chart -->
+            <div class="col-md-6">
+                <h4>User Type Breakdown</h4>
+                <canvas id="userTypeChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Another Charts Row -->
+        <div class="row chart-container mt-4">
+            <!-- Removed the Faculty Response Times chart -->
+
+            <!-- Adjusting layout so sentiment chart takes full width -->
+            <div class="col-md-6">
+                <h4>Sentiment Analysis (Selected Period)</h4>
+                <canvas id="sentimentChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Removed chat history table and search bar -->
+
+        <!-- Generate Comprehensive Report Button -->
+        <button class="btn btn-temple mt-3" onclick="generateReport()">Generate Comprehensive Report</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-3">
+        <p>&copy; 2024 LearnZilla. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS and Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Monthly Chat Volume Chart (Line)
+        const monthlyCtx = document.getElementById('monthlyChatChart').getContext('2d');
+        const monthlyChatChart = new Chart(monthlyCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Chats per Month',
+                    data: [2000, 2200, 2450, 2600, 3000, 3200, 3400, 3600, 4000, 4300, 4500, 4800],
+                    borderColor: '#990000',
+                    backgroundColor: 'rgba(153,0,0,0.1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+            }
+        });
+
+        // User Type Breakdown (Doughnut)
+        const userTypeCtx = document.getElementById('userTypeChart').getContext('2d');
+        const userTypeChart = new Chart(userTypeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Students', 'Faculty', 'Admins'],
+                datasets: [{
+                    data: [70, 25, 5],
+                    backgroundColor: ['#990000', '#cccccc', '#666666']
+                }]
+            },
+            options: {
+                responsive: true,
+            }
+        });
+
+        // Sentiment Analysis (Radar)
+        const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+        const sentimentChart = new Chart(sentimentCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Positive', 'Neutral', 'Negative', 'Confused', 'Frustrated'],
+                datasets: [{
+                    label: 'Sentiment Score',
+                    data: [85, 60, 10, 20, 15],
+                    backgroundColor: 'rgba(153,0,0,0.2)',
+                    borderColor: '#990000',
+                    pointBackgroundColor: '#990000'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        // Generate Comprehensive Report
+        function generateReport() {
+            const stats = `
+                <h2>Comprehensive Report</h2>
+                <p><strong>Total Conversations:</strong> 35,200</p>
+                <p><strong>Active Unique Users:</strong> 4,100</p>
+                <p><strong>Average Response Time:</strong> 1.2s</p>
+                <p><strong>User Satisfaction Rate:</strong> 92%</p>
+            `;
+            const reportWindow = window.open('', '_blank');
+            reportWindow.document.write('<html><head><title>Comprehensive Report</title></head><body>');
+            reportWindow.document.write(stats);
+            reportWindow.document.write('</body></html>');
+            reportWindow.document.close();
+        }
+    </script>
+</body>
+
+</html>

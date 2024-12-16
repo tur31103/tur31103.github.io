@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../common.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View All Chats</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --temple-red: #990000;
+            --temple-white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--temple-white);
+            color: black;
+        }
+
+        .navbar, .footer {
+            background-color: var(--temple-red);
+        }
+
+        .navbar-brand {
+            color: var(--temple-white) !important;
+        }
+
+        .footer {
+            color: var(--temple-white);
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .btn-temple {
+            background-color: var(--temple-red);
+            color: var(--temple-white);
+            border: none;
+        }
+
+        .btn-temple:hover {
+            background-color: #660000;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .table-row:hover {
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">LearnZilla</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../SuperuserFlow/superuser_dashboard.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../SuperuserFlow/superuser_history.html">All Chat History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../SuperuserFlow/superuser_user_dashboard.html">User Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../SuperuserFlow/supeeruser_analytical_dashboard.html">Analytical Dashboard</a>
+                    </li>
+                </ul>
+                <!-- User Dropdown with Profile Picture -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown d-flex align-items-center">
+                        <img src="https://via.placeholder.com/30" alt="Profile Picture" class="profile-pic">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            User
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../index.html">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <h1 class="mb-4">View All Chats</h1>
+
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" class="form-control search-bar" placeholder="Search by TUID, Chat ID, Content, or User Role" oninput="filterTable()">
+
+        <!-- Chat History Table -->
+        <div class="table-responsive">
+            <table class="table table-striped" id="chatHistoryTable">
+                <thead>
+                    <tr>
+                        <th scope="col">TUID</th>
+                        <th scope="col">Chat ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Content</th>
+                        <th scope="col">User Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sample Chat Records -->
+                    <tr class="table-row" data-bs-toggle="modal" data-bs-target="#chatModal" onclick="loadChatTranscript(1)">
+                        <td>123456</td>
+                        <td>CH101</td>
+                        <td>2024-12-01</td>
+                        <td>Discussed while and for loops.</td>
+                        <td>Student</td>
+                    </tr>
+                    <tr class="table-row" data-bs-toggle="modal" data-bs-target="#chatModal" onclick="loadChatTranscript(2)">
+                        <td>654321</td>
+                        <td>CH102</td>
+                        <td>2024-12-05</td>
+                        <td>Reviewed function definitions and scopes.</td>
+                        <td>Student</td>
+                    </tr>
+                    <tr class="table-row" data-bs-toggle="modal" data-bs-target="#chatModal" onclick="loadChatTranscript(3)">
+                        <td>112233</td>
+                        <td>CH201</td>
+                        <td>2024-11-20</td>
+                        <td>Discussed strategies for academic advising.</td>
+                        <td>Advisor</td>
+                    </tr>
+                    <tr class="table-row" data-bs-toggle="modal" data-bs-target="#chatModal" onclick="loadChatTranscript(4)">
+                        <td>223344</td>
+                        <td>CH202</td>
+                        <td>2024-11-22</td>
+                        <td>Reviewed course plans for next semester.</td>
+                        <td>Advisor</td>
+                    </tr>
+                    <tr class="table-row" data-bs-toggle="modal" data-bs-target="#chatModal" onclick="loadChatTranscript(5)">
+                        <td>334455</td>
+                        <td>CH301</td>
+                        <td>2024-10-15</td>
+                        <td>Discussed grading criteria for assignments.</td>
+                        <td>Faculty</td>
+                    </tr>
+                    <tr class="table-row" data-bs-toggle="modal" data-bs-target="#chatModal" onclick="loadChatTranscript(6)">
+                        <td>445566</td>
+                        <td>CH302</td>
+                        <td>2024-10-18</td>
+                        <td>Explained project guidelines.</td>
+                        <td>Faculty</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Save All Transcripts Button -->
+        <button class="btn btn-temple mt-3" onclick="saveAllTranscripts()">Save All Transcripts</button>
+    </div>
+
+    <!-- Chat Transcript Modal -->
+    <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="chatModalLabel">Chat Transcript</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="chatTranscriptContent">Loading chat transcript...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-temple" onclick="saveChatTranscript()">Save Transcript</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-4">
+        <div class="container">
+            <p>© 2024 LearnZilla. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const chatTranscripts = {
+            1: "Student asked about 'while' and 'for' loops. Clarified with examples of iteration logic.",
+            2: "Reviewed function definitions, parameters, and scope rules. Provided examples of recursion.",
+            3: "Advisor discussed strategies for academic advising with the student.",
+            4: "Advisor reviewed course plans for next semester, ensuring alignment with degree requirements.",
+            5: "Faculty member explained the grading criteria for assignments and provided rubrics.",
+            6: "Faculty detailed the project guidelines and answered student questions."
+        };
+
+        function loadChatTranscript(chatId) {
+            const transcriptContent = chatTranscripts[chatId] || 'Transcript not available.';
+            document.getElementById('chatTranscriptContent').textContent = transcriptContent;
+        }
+
+        function saveChatTranscript() {
+            const transcriptContent = document.getElementById('chatTranscriptContent').textContent;
+            const blob = new Blob([transcriptContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'chat_transcript.txt';
+            link.click();
+        }
+
+        function saveAllTranscripts() {
+            const rows = document.querySelectorAll('#chatHistoryTable tbody tr');
+            let allTranscripts = 'TUID,Chat ID,Date,Content,User Role\n';
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowData = Array.from(cells).map(cell => cell.textContent).join(',');
+                allTranscripts += rowData + '\n';
+            });
+
+            const blob = new Blob([allTranscripts], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'all_chat_transcripts.csv';
+            link.click();
+        }
+
+        function filterTable() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#chatHistoryTable tbody tr');
+
+            rows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                row.style.display = rowText.includes(searchValue) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>
